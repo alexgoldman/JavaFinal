@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	
+	<persistence-unit name="finalProject" transaction-type="JTA">
+	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+	<jta-data-source>jdbc/finalproject</jta-data-source>
+	<class>edu.pitt.finalProject.entity.BaseEntity</class>
+	<properties>
+	<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+	<property name="javax.persistence.jdbc.url" value="jdbc:mysql://sis-teach-01.sis.pitt.edu:3306/alg209is1017" />
+	<property name="javax.persistence.jdbc.user" value="alg209is1017" />
+	<property name="javax.persistence.jdbc.password" value="alg209@pitt.edu" />
+	<property name="eclipselink.dll-generation" value="drop-and-create-tables"/>
+	<property name="eclipselink.dll-generation.output-mode" value="database"/>
+	</properties>
+	</persistence-unit>
+</persistence>
