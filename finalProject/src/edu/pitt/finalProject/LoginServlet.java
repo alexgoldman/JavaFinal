@@ -70,10 +70,15 @@ public class LoginServlet extends HttpServlet {
 	        */
 		} else{
 			int credits = uf.creditQuery(username);
+			int key = uf.keyQuery(username);
 			HttpSession session = request.getSession(true);
-			session.setAttribute("user", username);
+			session.setAttribute("user", username.toString());
+			session.setAttribute("key", key);
 			session.setAttribute("credits", credits);
 			response.sendRedirect("javaFinalHome.jsp");
+			System.out.println(session.getAttribute("user"));
+			System.out.println(session.getAttribute("credits"));
+			System.out.println(session.getAttribute("key"));
 
 			/*
 			String htmlRespone = "<!DOCTYPE html><html>";

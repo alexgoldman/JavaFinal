@@ -41,4 +41,12 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/LogoutSevlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>CreditServlet</servlet-name>
+    <servlet-class>edu.pitt.finalProject.CreditServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreditServlet</servlet-name>
+    <url-pattern>/CreditSevlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -4,14 +4,17 @@
 <html>
 <head>
 <link href="javaFinalStyle.css" rel="stylesheet" type="text/css">
+
 <%  
-     if (session.getAttribute("user") != null) {  
-        %><%
-     } else { %><jsp:forward page="javaFinalLogin.jsp"/><%
-     }
- %>
+if (session.getAttribute("user") != null) {  
+   %><%
+} else { %><jsp:forward page="javaFinalLogin.jsp"/><%
+}
+%>
 
 <title>Blackjack Party!!!</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 <script type="text/javascript" src="Card.js"></script>
 <script type="text/javascript" src="DisplayedCard.js"></script>
@@ -19,7 +22,9 @@
 <script type="text/javascript" src="js/scriptaculous.js?load=effects"></script>
 
 
+
 <script type="text/javascript">
+
 
 <!-- -->
 
@@ -38,28 +43,32 @@ var betInput;
 var money;
 var moneyDisplay;
 var message;
+var user;
+user = <%= session.getAttribute("key") %>;
+console.log(user);
+
 
 var standButton, hitButton, newGameButton;  // objects representing the buttons, so I can enable/disable them
 
-function getCredits() {
+function updateCredits() {
 
-	var senderName = (objButton.name);
-		
-	var teamName = $("#teamName").val();
+	var key = user;
 	
-	var recName = $("#recName").val();
+	var credits = money;
 	
-	var dataString = 'senderName1=' + senderName + '&teamName1=' + teamName + '&recName1=' + recName;
-
 	
-	$.ajax({
-type: "POST",
-url: "getCredits.php",
+	
+	var dataString = 'key1=' + key + '&credits1=' + credits;
+	console.log(dataString);
+	
+	jQuery.ajax({
+type: "GET",
+url: "CreditServlet",
 data: dataString,
 cache: false,
 success: function(result){
-	
-	window.location.reload(true); 
+	//alert(result);
+	//window.location.reload(true); 
 
 }
 });
@@ -166,7 +175,13 @@ function startGame() {
    }
 }
 
+function tester(){
+	document.getElementById("test").innerHTML="Successfully run";
+	
+}
+
 function endGame(win, why) {
+	 
      if (win==0){
          money += bet;
 		 why="You win!";}
@@ -177,6 +192,8 @@ function endGame(win, why) {
 		money=money;
 		 why="Tie. It's a push.";
 	 }
+    //asdf
+  	 updateCredits();
 	 message.innerHTML = (win==0 ? "Awoooooga!!!  " : "  ") + why + 
            (money > 0 ? "<br>Click New Game to play again." : "<br>Looks like you've run out of money!");
      standButton.disabled = true;
