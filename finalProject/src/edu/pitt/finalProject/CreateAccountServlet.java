@@ -12,10 +12,10 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 
 /**
- * Servlet implementation class CreditServlet
+ * Servlet implementation class CreateAccountServlet
  */
-@WebServlet("/CreditServlet")
-public class CreditServlet extends HttpServlet {
+@WebServlet("/CreateAccountServlet")
+public class CreateAccountServlet extends HttpServlet {
 	
 	@EJB
 	UserFacade uf;
@@ -30,7 +30,7 @@ public class CreditServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreditServlet() {
+    public CreateAccountServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,22 +41,43 @@ public class CreditServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		System.out.println("At the credit update servlet");
-		int key = Integer.parseInt(request.getParameter("key1"));
-		int credits = Integer.parseInt(request.getParameter("credits1"));
-		uf.creditUpdate(key, credits);
-		if(credits<=0){
-			System.out.println("In no credits statement");
-			uf.addCredits(key);
-			
-			HttpSession session = request.getSession(true);
-			session.setAttribute("credits", 10);
-		} else{
-			HttpSession session = request.getSession(true);
-			session.setAttribute("credits", credits);
+		
+		String username = request.getParameter("username");
+		String email = request.getParameter("email");
+		
+		int usernameExists = uf.usernameCheck(username);
+		int emailExists = uf.usernameCheck(email);
+		
+		if(usernameExists==1){
+			System.out.println("Username taken");
+			request.setAttribute("usernameError", "Username taken");
+			//request.getRequestDispatcher("/javaFinalCreateAccount.jsp").forward(request, response);
 		}
 		
+		if(emailExists==1){
+			System.out.println("Email in use");
+			request.setAttribute("emailError", "Email in use");
+			
+		}
 		
+		if(usernameExists==1 || emailExists==1){
+			request.getRequestDispatcher("/javaFinalCreateAccount.jsp").forward(request, response);
+		} else {
+			//adsf
+			System.out.println("In create account else statement.");
+			String fname = request.getParameter("fname");
+			String lname = request.getParameter("lname");
+			String password = request.getParameter("password");
+			uf.createAccount(fname, lname, email, username, password);
+			
+			int credits = uf.creditQuery(username);
+			int key = uf.keyQuery(username);
+			HttpSession session = request.getSession(true);
+			session.setAttribute("user", username);
+			session.setAttribute("key", key);
+			session.setAttribute("credits", credits);
+			response.sendRedirect("javaFinalHome.jsp");
+		}
 	}
 
 	/**

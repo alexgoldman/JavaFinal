@@ -4,7 +4,7 @@
 <html>
 <head>
 <link href="javaFinalStyle.css" rel="stylesheet" type="text/css">
-
+<!-- Checks if the user is signed in -->
 <%  
 if (session.getAttribute("user") != null) {  
    %><%
@@ -180,22 +180,80 @@ function tester(){
 	
 }
 
+
+
+window.onbeforeunload = function(e) {
+	if(gameInProgress){
+		 var dialogText = 'Are you sure you want to leave?';
+		  e.returnValue = dialogText;
+		  
+		  
+		  return dialogText;
+	}
+	 
+	  
+	};
+	
+window.onunload = function(){
+	if(gameInProgress){
+	console.log("In unload statement");
+	 money -=bet;
+	 
+
+			var key = user;
+			
+			var credits = money;
+			
+			
+			
+			var dataString = 'key1=' + key + '&credits1=' + credits;
+			console.log(dataString);
+			
+			jQuery.ajax({
+		type: "GET",
+		url: "CreditServlet",
+		async:false,
+		data: dataString,
+		cache: false,
+		success: function(result){
+			
+			
+
+		}
+		});
+			
+	    
+
+		return false;
+		
+		 
+
+		
+	}
+}
+
+
 function endGame(win, why) {
 	 
      if (win==0){
          money += bet;
-		 why="You win!";}
+		 why="You win!";
+		 message.innerHTML = "Wooohoo!!! " + why + ("<br>Click New Game to play again.");}
      else if(win==1){
          money -= bet;
-		 why= "You lose!!";}
+         if(money<=0){
+        	 money=10;
+         }
+		 why= "You lose!!";
+		 message.innerHTML = "Oh no! " + why + ("<br>Click New Game to play again.");}
      else{
 		money=money;
 		 why="Tie. It's a push.";
+		 message.innerHTML = "Push!!! " + why + ("<br>Click New Game to play again.");
 	 }
     //asdf
-  	 updateCredits();
-	 message.innerHTML = (win==0 ? "Awoooooga!!!  " : "  ") + why + 
-           (money > 0 ? "<br>Click New Game to play again." : "<br>Looks like you've run out of money!");
+  	
+	 
      standButton.disabled = true;
      hitButton.disabled = true;
      newGameButton.disabled = true;
@@ -215,21 +273,21 @@ function endGame(win, why) {
                queue: "end",
                afterFinish: function() {
                    if (money <= 0) {
-                        betInput.value = "BUSTED";
-                        new Effect.Shake(moneyDisplay);
+                        money=10;
                    }
-                   else {
+                   
                        if (bet > money)
                           betInput.value = money;
                        standButton.disabled = true;
                        hitButton.disabled = true;
                        newGameButton.disabled = false;
                        betInput.disabled = false;
-                   }
+                   
                }
             });
         }
      });
+     updateCredits();
 }
 
 
@@ -286,7 +344,7 @@ function hit() {
          hitButton.disabled = false;
          standButton.disabled = false;
       }
-   });
+   } );
 }
 
 function stand() {
@@ -306,13 +364,13 @@ onload=setup;
 <img id="head" src="blackjack.jpg" style="width:80%; height: 300px;"></img>
 
 <h1 id="headTitle">Blackjack Party!</h1>
-
+<input id="activeDeck" type="text" style="display:none" value="<%= session.getAttribute("activeDeck") %>" />
 <ul>
 	
   <li><a href="javaFinalHome.jsp">My Account</a></li>
   <li><a href="javaFinalGame.jsp">Blackjack</a></li>
-  <li><a href="javaFinalStore.html">Store</a></li>
-  <li><a href="javaFinalHelp.html">Help</a></li>
+  <li><a href="javaFinalStore.jsp">Store</a></li>
+  <li><a href="javaFinalHelp.jsp">Help</a></li>
   <%  
      if (session.getAttribute("user") != null ) {  
         %><li><a href="LogoutServlet">Sign Out</a></li>  <%

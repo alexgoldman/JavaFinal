@@ -12,11 +12,10 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 
 /**
- * Servlet implementation class CreditServlet
+ * Servlet implementation class PurchaseServlet
  */
-@WebServlet("/CreditServlet")
-public class CreditServlet extends HttpServlet {
-	
+@WebServlet("/PurchaseServlet")
+public class PurchaseServlet extends HttpServlet {
 	@EJB
 	UserFacade uf;
 	
@@ -25,12 +24,13 @@ public class CreditServlet extends HttpServlet {
 	
 	HttpServletResponse response;
 	
+	
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreditServlet() {
+    public PurchaseServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,19 +41,38 @@ public class CreditServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		System.out.println("At the credit update servlet");
-		int key = Integer.parseInt(request.getParameter("key1"));
-		int credits = Integer.parseInt(request.getParameter("credits1"));
-		uf.creditUpdate(key, credits);
-		if(credits<=0){
-			System.out.println("In no credits statement");
-			uf.addCredits(key);
+		HttpSession session = request.getSession(true);
+		System.out.println("At the purchase servlet");
+		int key = (int) session.getAttribute("key");
+		System.out.println(key);
+		String username = (String) session.getAttribute("user");
+		System.out.println(username);
+		int price = Integer.parseInt(request.getParameter("price1"));
+		System.out.println(price);
+		int themeID = Integer.parseInt(request.getParameter("theme1"));
+		System.out.println(themeID);
+		int credits = uf.creditQuery(username);
+		System.out.println(credits);
+		if(price>credits){
+			System.out.println("In the not enough credits statement");
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write("no good");
 			
-			HttpSession session = request.getSession(true);
-			session.setAttribute("credits", 10);
-		} else{
-			HttpSession session = request.getSession(true);
-			session.setAttribute("credits", credits);
+		} else {
+			
+			uf.purchaseQuery(key, price, themeID);
+			int newCredits = uf.creditQuery(username);
+			if(newCredits<=0){
+				uf.addCredits(key);
+				newCredits=10;
+			}
+			session.setAttribute("credits", newCredits);
+			session.setAttribute("purchase"+themeID, themeID);
+			response.setContentType("text/plain");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write("good");
+			//asfd
 		}
 		
 		

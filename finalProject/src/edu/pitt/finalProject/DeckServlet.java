@@ -12,10 +12,10 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Context;
 
 /**
- * Servlet implementation class CreditServlet
+ * Servlet implementation class DeckServlet
  */
-@WebServlet("/CreditServlet")
-public class CreditServlet extends HttpServlet {
+@WebServlet("/DeckServlet")
+public class DeckServlet extends HttpServlet {
 	
 	@EJB
 	UserFacade uf;
@@ -24,13 +24,12 @@ public class CreditServlet extends HttpServlet {
 	HttpServletRequest request;
 	
 	HttpServletResponse response;
-	
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreditServlet() {
+    public DeckServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,23 +39,14 @@ public class CreditServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		System.out.println("At the credit update servlet");
-		int key = Integer.parseInt(request.getParameter("key1"));
-		int credits = Integer.parseInt(request.getParameter("credits1"));
-		uf.creditUpdate(key, credits);
-		if(credits<=0){
-			System.out.println("In no credits statement");
-			uf.addCredits(key);
-			
-			HttpSession session = request.getSession(true);
-			session.setAttribute("credits", 10);
-		} else{
-			HttpSession session = request.getSession(true);
-			session.setAttribute("credits", credits);
-		}
+		//response.getWriter().append("Served at: ").append(request.getContextPath());kjas
+		System.out.println("At the deck update servlet");
+		String deck = request.getParameter("deck1");
 		
 		
+		HttpSession session = request.getSession(true);
+		session.setAttribute("activeDeck", deck);
+		System.out.println(session.getAttribute("activeDeck"));
 	}
 
 	/**

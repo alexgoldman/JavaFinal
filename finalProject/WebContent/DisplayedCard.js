@@ -19,7 +19,9 @@ function DisplayedCard(divid, card) {
    this.div.appendChild(div1);
    var cardImg = document.createElement("img");
    this.cardImg = cardImg;
-   cardImg.src = "cards4.png";
+   var cardFile = document.getElementById("activeDeck").value;
+   console.log("Here. Cardfile: " + cardFile);
+   cardImg.src = cardFile;
    cardImg.style.position = "absolute";
    cardImg.style.width = (79*13) + "px";
    cardImg.style.height = (123*5) + "px";

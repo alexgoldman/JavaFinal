@@ -21,27 +21,39 @@
 
 </head>
 <body>
-<form method="post" action="LoginServlet">
-<h3>Username: 
-<input name="username" type="text"/></h3>
-<h3>Password:
-<input name="password" type="password" /></h3>
-<input type="submit" name="submit" value="Login" />
-</form>
-
-<%
-    if(null!=request.getAttribute("errorMessage"))
+<form method="post" action="CreateAccountServlet">
+<h3>First Name: 
+<input required name="fname" type="text"/></h3>
+<h3>Last Name: 
+<input required name="lname" type="text"/></h3>
+<h3>Email: 
+<input required name="email" type="text"/><%
+    if(null!=request.getAttribute("emailError"))
     {
-        out.println(request.getAttribute("errorMessage"));
+        out.println(request.getAttribute("emailError"));
     }
 %>
+</h3>
+<h3>Username: 
+<input required name="username" type="text"/><%
+    if(null!=request.getAttribute("usernameError"))
+    {
+        out.println(request.getAttribute("usernameError"));
+    }
+%>
+</h3>
+<h3>Password:
+<input required name="password" type="password" /></h3>
+<input type="submit" name="submit" value="Create" />
+</form>
+
+
  <%  
      if (session.getAttribute("user") != null) {  
         %><jsp:forward page="javaFinalHome.jsp"/>  <%
      } else { %><h2>Session user null</h2> <%
      }
  %>
-<h2> Don't have an account?  Create one:</h2>
-<input name="createAccount" type="button" value="Create Account" onClick="window.location.href='javaFinalCreateAccount.jsp'" />
+
 </body>
 </html>
